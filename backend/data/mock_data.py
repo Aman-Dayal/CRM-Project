@@ -153,90 +153,90 @@ DEALS_MOCK = [
         "id": "d1",
         "title": "Enterprise Software Package",
         "company": "Tech Corp",
-        "contactId": "c1",
         "value": 75000,
         "stage": "Negotiation",
-        "date": "2025-04-30"
+        "date": "2025-04-30",
+        "contactId": "c1"
     },
     {
         "id": "d2",
         "title": "Marketing Campaign",
         "company": "Global Marketing",
-        "contactId": "c4",
         "value": 25000,
         "stage": "Proposal",
-        "date": "2025-05-15"
+        "date": "2025-05-15",
+        "contactId": "c4"
     },
     {
         "id": "d3",
         "title": "Data Analytics Platform",
         "company": "Data Analytics Pro",
-        "contactId": "c8",
         "value": 50000,
         "stage": "Qualified",
-        "date": "2025-05-10"
+        "date": "2025-05-10",
+        "contactId": "c8"
     },
     {
         "id": "d4",
         "title": "Cloud Migration Project",
         "company": "Cloud Computing Inc",
-        "contactId": "c7",
         "value": 120000,
         "stage": "Won",
-        "date": "2025-04-20"
+        "date": "2025-04-20",
+        "contactId": "c7"
     },
     {
         "id": "d5",
         "title": "IT Consulting Services",
         "company": "Apex Consulting",
-        "contactId": "c6",
         "value": 30000,
         "stage": "Qualified",
-        "date": "2025-05-25"
+        "date": "2025-05-25",
+        "contactId": "c6"
     },
     {
         "id": "d6",
         "title": "Software Implementation",
         "company": "Innovate.io",
-        "contactId": "c2",
         "value": 45000,
         "stage": "Proposal",
-        "date": "2025-05-05"
+        "date": "2025-05-05",
+        "contactId": "c2"
     },
     {
         "id": "d7",
         "title": "Hardware Upgrade",
         "company": "Future Factory",
-        "contactId": "c5",
         "value": 85000,
         "stage": "Lost",
-        "date": "2025-04-15"
+        "date": "2025-04-15",
+        "contactId": "c5"
     },
     {
         "id": "d8",
         "title": "Custom Development",
         "company": "Next Software",
-        "contactId": "c3",
         "value": 60000,
         "stage": "Negotiation",
-        "date": "2025-05-20"
+        "date": "2025-05-20",
+        "contactId": "c3"
     },
     {
         "id": "d9",
         "title": "Annual Support Contract",
         "company": "Tech Corp",
-        "contactId": "c1",
         "value": 35000,
         "stage": "Won",
-        "date": "2025-04-10"
+        "date": "2025-04-10",
+        "contactId": "c1"
     },
     {
         "id": "d10",
         "title": "Mobile App Development",
         "company": "Innovate.io",
-        "contactId": "c2",
         "value": 55000,
         "stage": "Qualified",
-        "date": "2025-06-01"
+        "date": "2025-06-01",
+        "contactId": "c2"
     }
 ]

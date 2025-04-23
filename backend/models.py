@@ -19,11 +19,12 @@ class CompanyCreate(BaseModel):
 
 class Deal(BaseModel):
     id: str
-    name: str
+    title: str
+    company: str
     stage: str
-    amount: float
-    closeDate: str
-    contact: str
+    value: float
+    date: str
+    contactId: str
 
 class DealCreate(BaseModel):
     name: str
@@ -31,6 +32,8 @@ class DealCreate(BaseModel):
     amount: float
     closeDate: str
     contact: str
+    contactID: str
+    contactID: str
 
 class Contact(BaseModel):
     id: str

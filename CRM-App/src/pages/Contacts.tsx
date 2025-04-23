@@ -24,6 +24,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Search, Plus, MoreHorizontal, Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { FormModal } from "@/components/ui/FormModal";
 
 interface Contact {
   id: string;
@@ -70,10 +72,52 @@ export default function Contacts() {
             Manage your contacts and their information
           </CardDescription>
         </div>
-          <Button className="flex items-center gap-2 self-start">            
-            <Plus className="mr-2 h-4 w-4" />
-            <span>Add Contact</span>
-          </Button>
+          <FormModal
+            title="Add Contact"
+            description="Create a new contact in your CRM"
+            trigger={
+              <Button className="flex items-center gap-2 self-start">
+                <Plus className="mr-2 h-4 w-4" />
+                <span>Add Contact</span>
+              </Button>
+            }
+          >
+            <form className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="name" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                  Name
+                </label>
+                <Input id="name" className="col-span-3 peer" placeholder="Name" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="email" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                  Email
+                </label>
+                <Input id="email" className="col-span-3 peer" placeholder="Email" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="company" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                  Company
+                </label>
+                <Input id="company" className="col-span-3 peer" placeholder="Company" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="phone" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                  Phone
+                </label>
+                <Input id="phone" className="col-span-3 peer" placeholder="Phone" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="status" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                  Status
+                </label>
+                <Input id="status" className="col-span-3 peer" placeholder="Status" />
+              </div>
+              <div className="flex justify-end">
+                <Button type="submit">Create Contact</Button>
+              </div>
+            </form>
+          </FormModal>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-between">

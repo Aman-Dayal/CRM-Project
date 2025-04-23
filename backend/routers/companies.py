@@ -11,34 +11,49 @@ router = APIRouter()
 
 @router.get("/companies", response_model=List[Company])
 async def list_companies():
-    return companies
+    try:
+        return companies
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/companies", response_model=Company)
 async def create_company(company: CompanyCreate):
-    company_id = str(len(companies) + 1)
-    new_company = Company(id=company_id, **company.dict(), contactCount=0)
-    companies.append(new_company)
-    return new_company
+    try:
+        company_id = str(len(companies) + 1)
+        new_company = Company(id=company_id, **company.dict(), contactCount=0)
+        companies.append(new_company)
+        return new_company
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/companies/{id}", response_model=Company)
 async def get_company(id: str):
-    company = next((c for c in companies if c.id == id), None)
-    if company is None:
-        raise HTTPException(status_code=404, detail="Company not found")
-    return company
+    try:
+        company = next((c for c in companies if c.id == id), None)
+        if company is None:
+            raise HTTPException(status_code=404, detail="Company not found")
+        return company
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/companies/{id}", response_model=Company)
 async def update_company(id: str, company: CompanyCreate):
-    for index, c in enumerate(companies):
-        if c.id == id:
-            companies[index] = Company(id=id, **company.dict(), contactCount=c.contactCount)
-            return companies[index]
-    raise HTTPException(status_code=404, detail="Company not found")
+    try:
+        for index, c in enumerate(companies):
+            if c.id == id:
+                companies[index] = Company(id=id, **company.dict(), contactCount=c.contactCount)
+                return companies[index]
+        raise HTTPException(status_code=404, detail="Company not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/companies/{id}")
 async def delete_company(id: str):
-    for index, c in enumerate(companies):
-        if c.id == id:
-            del companies[index]
-            return {"message": "Company deleted"}
-    raise HTTPException(status_code=404, detail="Company not found")
+    try:
+        for index, c in enumerate(companies):
+            if c.id == id:
+                del companies[index]
+                return {"message": "Company deleted"}
+        raise HTTPException(status_code=404, detail="Company not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

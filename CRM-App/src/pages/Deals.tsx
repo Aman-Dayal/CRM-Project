@@ -9,6 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Plus } from "lucide-react";
+import { FormModal } from "@/components/ui/FormModal";
+import { Input } from "@/components/ui/input";
 
 // Deal stages
 const stages = ["Qualified", "Proposal", "Negotiation", "Won", "Lost"];
@@ -76,17 +78,150 @@ export default function Deals() {
 
   // Handle drop
   const handleDrop = (stage: string) => {
-    console.log(`Deal ${draggingDeal} moved to ${stage}`);
-    setDraggingDeal(null);
+    if (draggingDeal) {
+      debouncedUpdateDealStage(draggingDeal, stage);
+      setDraggingDeal(null);
+    }
   };
+
+  // Debounce function
+  function debounce<Params extends any[]>(
+    func: (...args: Params) => any,
+    timeout: number
+  ): (...args: Params) => void {
+    let timer: NodeJS.Timeout;
+    return (...args: Params) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func(...args);
+      }, timeout);
+    };
+  }
+
+  const updateDealStage = async (dealId: string, stage: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/deals/${dealId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stage }),
+      });
+
+      if (response.ok) {
+        console.log(`Deal ${dealId} moved to ${stage}`);
+        // Refresh deals
+        const fetchData = async () => {
+          try {
+            const response = await fetch("http://localhost:8000/deals");
+            const data = await response.json();
+            setDeals(data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+        fetchData();
+      } else {
+        console.error(`Failed to update deal ${dealId}`);
+      }
+    } catch (error) {
+      console.error("Error updating deal:", error);
+    }
+  };
+
+  const debouncedUpdateDealStage = debounce(updateDealStage, 500);
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
-        <Button className="flex items-center gap-2">
-          <Plus size={16} />
-          <span>Add Deal</span>
-        </Button>
+        <FormModal
+          title="Add Deal"
+          description="Create a new deal in your CRM"
+          trigger={
+            <Button className="flex items-center gap-2">
+              <Plus size={16} />
+              <span>Add Deal</span>
+            </Button>
+          }
+        >
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const title = (document.getElementById("title") as HTMLInputElement).value;
+              const company = (document.getElementById("company") as HTMLInputElement).value;
+              const contactId = (document.getElementById("contactId") as HTMLInputElement).value;
+              const value = (document.getElementById("value") as HTMLInputElement).value;
+              const stage = (document.getElementById("stage") as HTMLInputElement).value;
+              const date = (document.getElementById("date") as HTMLInputElement).value;
+              try {
+                const response = await fetch("http://localhost:8000/deals", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    title: title,
+                    company: company,
+                    contactId: contactId,
+                    value: value,
+                    stage: stage,
+                    date: date,
+                  }),
+                });
+                if (response.ok) {
+                  console.log("Deal created successfully!");
+                  window.location.reload();
+                  // Optionally, you can refresh the deal list here
+                } else {
+                  console.error("Failed to create deal");
+                }
+              } catch (error) {
+                console.error("Error creating deal:", error);
+              }
+            }}
+            className="grid gap-4 py-4"
+          >
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="title" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Title
+              </label>
+              <Input id="title" className="col-span-3 peer" placeholder="Title" required/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="company" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Company
+              </label>
+              <Input id="company" className="col-span-3 peer" placeholder="Company" required/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="contactId" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Contact ID
+              </label>
+              <Input id="contactId" className="col-span-3 peer" placeholder="Contact ID" required/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="value" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Value
+              </label>
+              <Input id="value" className="col-span-3 peer" placeholder="Value" type="number" required/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="stage" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Stage
+              </label>
+              <Input id="stage" className="col-span-3 peer" placeholder="Stage" required/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="date" className="text-right absolute top-0 left-0 px-2 py-1 bg-white text-gray-500 transition-all duration-200 peer-focus:text-sm peer-focus:-translate-y-2 peer-focus:translate-x-1 peer-focus:text-gray-700 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2">
+                Date
+              </label>
+              <Input id="date" className="col-span-3 peer" placeholder="Date" type="date" required/>
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit">Create Deal</Button>
+            </div>
+          </form>
+        </FormModal>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">

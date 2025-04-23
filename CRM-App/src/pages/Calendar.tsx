@@ -1,4 +1,5 @@
 
+import { FormModal } from "@/components/ui/FormModal";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
@@ -62,8 +63,6 @@ export default function CalendarPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1 p-4">
           <Calendar
@@ -87,45 +86,74 @@ export default function CalendarPage() {
           />
         </Card>
 
-        <Card className="md:col-span-2 p-6">
+        <Card className="md:col-span-2 p-6 relative">
           <div className="flex items-center gap-2 mb-6">
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <h2 className="text-xl font-semibold">
               {date?.toLocaleDateString("en-US", {
-                weekday: "long",
+                // weekday: "long",
                 month: "long",
                 day: "numeric",
                 year: "numeric",
               })}
             </h2>
           </div>
-
-          {selectedDayEvents.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 border rounded-md border-dashed">
-              <p className="text-muted-foreground">No events scheduled</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {selectedDayEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className={cn(
-                    "p-3 rounded-md border-l-4",
-                    event.type === "meeting" && "border-l-blue-500 bg-blue-50",
-                    event.type === "call" && "border-l-green-500 bg-green-50",
-                    event.type === "task" && "border-l-amber-500 bg-amber-50"
-                  )}
-                >
-                  <p className="font-medium">{event.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {event.date.toLocaleTimeString("en-US", {
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                  </p>
+          {date && date >= new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) && (
+            <FormModal
+              title="Create Event"
+              description="Schedule a new event on this date"
+              trigger={
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute top-4 right-4">
+                  Create Event
+                </button>
+              }
+            >
+              <form className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="title" className="text-right">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    id="title"
+                    className="col-span-3 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                    placeholder="Title"
+                  />
+              </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="time" className="text-right">
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    id="time"
+                    className="col-span-3 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                    placeholder="Time"
+                  />
+              </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="type" className="text-right">
+                    Type
+                  </label>
+                  <select
+                    id="type"
+                    className="col-span-3 rounded-md border-gray-200 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                  >
+                    <option value="meeting">Type</option>
+                    <option value="call">Call</option>
+                    <option value="task">Task</option>
+                  </select>
+              </div>
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Create
+                  </button>
                 </div>
-              ))}
-            </div>
+              </form>
+            </FormModal>
           )}
         </Card>
       </div>
