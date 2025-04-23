@@ -67,6 +67,6 @@ The backend is built with Python and FastAPI. It provides a REST API for managin
 
 1.  Clone the repository: `git clone https://github.com/Aman-Dayal/CRM-Application.git`
 2.  Install the dependencies: `npm install`
-3.  uvicorn main:app --reload
+3.  Start backend server: uvicorn main:app --reload
 4.  Start the development server: `npm run dev`
 
